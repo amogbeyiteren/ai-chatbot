@@ -49,7 +49,7 @@ function Home({height}) {
             // Handle error message and set it with red color
             setChatLog((prevChatLog) => [
                 ...prevChatLog,
-                { type: 'ai', message: error.message, isError: true }
+                { type: 'ai', message: "Request failed, API key unavailable for security reasons", isError: true }
             ]);
     
             setIsLoading(false);
