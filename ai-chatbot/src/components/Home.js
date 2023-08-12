@@ -27,26 +27,33 @@ function Home({height}) {
         const data = {
             model: "gpt-3.5-turbo-0613",
             messages: [{ "role": "user", "content": message }],
-            
         };
-        
+    
         setIsLoading(true);
-
+    
         try {
             const response = await axios.post(url, data, { headers: headers });
             const aiMessage = response.data.choices[0].message.content;
-
+    
             setChatLog((prevChatLog) => [
                 ...prevChatLog,
-                { type: 'ai', message: aiMessage }
+                { type: 'ai', message: aiMessage, isError: false } // No error, so isError is false
             ]);
-
+    
             setIsLoading(false);
         } catch (error) {
             console.error(error);
+            
+            // Handle error message and set it with red color
+            setChatLog((prevChatLog) => [
+                ...prevChatLog,
+                { type: 'ai', message: error.message, isError: true }
+            ]);
+    
             setIsLoading(false);
         }
     };
+    
     const userInputElement = useRef(null);
 
     // Function to scroll to the user-input div
@@ -65,13 +72,16 @@ function Home({height}) {
         
             <Container className="d-flex flex-column" fluid style={{ height:`calc(100vh - ${height}px)`}}>
                 
-                <div className="flex-grow-1 px-5 py-4 d-flex flex-column" style={{width:'100%',  overflowY: 'auto'}}>
+                <div className="flex-grow-1 px-3 py-4 d-flex flex-column" style={{width:'100%',  overflowY: 'auto'}}>
                     {chatLog.map((message, index) => (
-                        <div key={index} className={`d-flex ${index % 2 === 0 ? 'flex-row-reverse' : 'flex-row'}`}>
+                        <div key={index} className={`message ${message.type === 'ai' ? 'ai-message' : 'user-message'} ${message.isError ? 'error-message' : ''}`}
+    
+                        
+                        >
                         <span className="align-self-center">
                           <img
-                            src={index % 2 === 0 ? user : ai}
-                            alt={index % 2 === 0 ? 'User' : 'AI'}
+                            src={message.type === 'ai' ? ai : user}
+                            alt={message.type === 'ai' ? 'AI' : 'user'}
                             style={{
                               width: '30px',
                               height: '30px',
@@ -81,7 +91,7 @@ function Home({height}) {
                             }}
                           />
                         </span>
-                        <div className={`speech-bubble p-2 ${index % 2 === 0 ? 'text-end' : 'text-start'}`}>
+                        <div className={`speech-bubble p-2 ${message.type === 'ai' ? 'text-start' : 'text-end'}`}>
                           {message.message}
                         </div>
                       </div>

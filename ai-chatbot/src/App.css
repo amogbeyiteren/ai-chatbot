@@ -45,9 +45,18 @@
   cursor: pointer;
   margin-top: 10px;
 }
-
-
-
+.error-message {
+  color: red;
+ 
+}
+.ai-message{
+  display: flex;
+  flex-direction: row;
+}
+.user-message{
+  display: flex;
+  flex-direction: row-reverse;
+}
 
 
 .App-logo {
