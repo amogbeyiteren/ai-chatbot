@@ -4,6 +4,7 @@ import axios from 'axios';
 import ai from "../assets/images/ai-avatar.svg";
 import user from "../assets/images/user-avatar.svg";
 
+
 function Home({height}) {
     const [inputValue, setInputValue] = useState('');
     const [chatLog, setChatLog] = useState([]);
@@ -17,12 +18,13 @@ function Home({height}) {
             setInputValue('');
         }
     };
+    const api_key=process.env.REACT_APP_API_KEY;
 
     const sendMessage = async (message) => {
         const url = 'https://api.openai.com/v1/chat/completions';
         const headers = {
             "Content-type": "application/json",
-            "Authorization": `Bearer ${process.env.REACT_APP_NEXT_PUBLIC_OPENAI_API_KEY}`
+            "Authorization": `Bearer ${api_key}`
         };
         const data = {
             model: "gpt-3.5-turbo-0613",
